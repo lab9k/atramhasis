@@ -359,6 +359,7 @@ class AtramhasisAdminView(object):
         url = self.request.route_url('login')
         return HTTPFound(location=url)
 
+
     @view_config(route_name='scheme_tree_invalidate', renderer='json', accept='application/json', permission='edit')
     def invalidate_scheme_tree(self):
         scheme_id = self.request.matchdict['scheme_id']
