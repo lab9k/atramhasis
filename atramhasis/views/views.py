@@ -75,9 +75,13 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         return {'conceptschemes': conceptschemes}
+
+    @view_config(route_name='createscheme', renderer='atramhasis:templates/add-conceptscheme.jinja2')
+    def add_conceptscheme_view(self):
+        return {'admin': None}
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
@@ -89,7 +93,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -104,7 +108,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -133,7 +137,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
@@ -166,7 +170,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
@@ -174,7 +178,8 @@ class AtramhasisView(object):
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name, sort='label')
+                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name,
+                                         sort='label')
             elif (label is None) and (ctype is not None):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name, sort='label')
             else:
@@ -362,3 +367,18 @@ class AtramhasisAdminView(object):
     def invalidate_tree(self):
         invalidate_cache()
         return Response(status_int=200)
+
+
+@view_defaults(accept='text/html')
+class ConceptschemeView(object):
+    """
+    This object groups HTML views part of the conceptscheme user interface.
+    """
+
+    def __init__(self, request):
+        self.request = request
+        self.logged_in = request.authenticated_userid
+        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
+            self.skos_registry = self.request.skos_registry
+        else:
+            raise SkosRegistryNotFoundException()
