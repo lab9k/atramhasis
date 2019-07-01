@@ -1,0 +1,33 @@
+{% extends "layout.jinja2" %}
+
+{% set app_package = app_package|default('atramhasis', true) %}
+{% set copyright_year = copyright_year|default('2016-2017') %}
+
+{% block html_title %}Add conceptscheme{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="bgcontainer">
+        <div class="row">
+            <h1>Add Conceptscheme</h1>
+            <div>
+                <label for="scheme_name">name:<input id="scheme_name" type="text"></label>
+                <label for="scheme_uri">uri:<input id="scheme_uri" type="text"></label>
+                <button type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block subfooter %}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+
+{% block custom_js %}{% endblock %}
+

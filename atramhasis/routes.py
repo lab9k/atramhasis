@@ -24,10 +24,12 @@ def includeme(config):
     config.add_route('atramhasis.rdf_individual_export_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.rdf')
     config.add_route('atramhasis.rdf_individual_export_turtle_ext', pattern='/conceptschemes/{scheme_id}/c/{c_id}.ttl')
 
+    config.add_route('createscheme', '/createConceptscheme')
     config.add_route('conceptschemes', pattern='/conceptschemes', accept='text/html', request_method="GET")
     config.add_route('conceptscheme', pattern='/conceptschemes/{scheme_id}', accept='text/html', request_method="GET")
     config.add_route('concept', pattern='/conceptschemes/{scheme_id}/c/{c_id}', accept='text/html',
                      request_method="GET")
+
     config.add_route('search_result', pattern='/conceptschemes/{scheme_id}/c', accept='text/html')
     config.add_route('scheme_root', pattern='/conceptschemes/{scheme_id}/c/', accept='text/html')
     config.add_route('scheme_tree', pattern='/conceptschemes/{scheme_id}/tree', accept='application/json')
