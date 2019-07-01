@@ -58,6 +58,8 @@ def includeme(config):
     config.add_route('labeltypes', '/labeltypes', accept='application/json', request_method="GET")
     config.add_route('notetypes', '/notetypes', accept='application/json', request_method="GET")
 
+    config.add_route('login', '/login')
+    config.add_route('logout', '/logout')
     config.add_route('admin', '/admin')
     config.add_route('scheme_tree_invalidate', pattern='/admin/tree/invalidate/{scheme_id}', accept='application/json')
     config.add_route('tree_invalidate', pattern='/admin/tree/invalidate', accept='application/json')

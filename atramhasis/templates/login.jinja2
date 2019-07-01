@@ -1,0 +1,33 @@
+{% set app_package = app_package|default('atramhasis', true) -%}
+{% if request.registry.settings['dojo.mode'] == 'dist' %}
+    {% set release_dir = app_package + ':static/admin/dist' %}
+{% else %}
+    {% set release_dir = app_package + ':static/admin/src' %}
+{% endif %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ request.static_path(app_package + ':static/css/app-admin.css') }}"/>
+    <link rel="stylesheet" href="{{ request.static_path(release_dir + '/app/resources/app.css') }}"/>
+    <title>Atramhasis Login</title>
+
+</head>
+
+<body class="claro">
+
+<form action="{{ request.route_path('login') }}" method="post">
+    <div class="form-group">
+        <label for="username">username:</label>
+        <input type="text" id="username" name="usernameIn">
+    </div>
+    <div class="form-group">
+        <label for="password">password:</label>
+        <input type="password" id="password" name="passwordIn">
+    </div>
+    <button type="submit">login</button>
+</form>
+
+</body>
+</html>

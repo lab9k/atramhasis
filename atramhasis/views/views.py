@@ -75,7 +75,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -93,7 +93,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -108,7 +108,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -137,7 +137,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
@@ -170,7 +170,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-        ]
+            ]
 
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
@@ -178,8 +178,7 @@ class AtramhasisView(object):
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name,
-                                         sort='label')
+                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name, sort='label')
             elif (label is None) and (ctype is not None):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name, sort='label')
             else:
@@ -355,7 +354,10 @@ class AtramhasisAdminView(object):
 
     @view_config(route_name='admin', renderer='atramhasis:templates/admin.jinja2', permission='edit')
     def admin_view(self):
-        return {'admin': None}
+        if 'user' in self.request.session:
+            return {'admin': None}
+        url = self.request.route_url('login')
+        return HTTPFound(location=url)
 
     @view_config(route_name='scheme_tree_invalidate', renderer='json', accept='application/json', permission='edit')
     def invalidate_scheme_tree(self):
@@ -368,17 +370,22 @@ class AtramhasisAdminView(object):
         invalidate_cache()
         return Response(status_int=200)
 
+    @view_config(route_name='login', renderer='atramhasis:templates/login.jinja2', permission='edit')
+    def login_view(self):
+        user = '<default user field value>'
+        if self.request.POST.get('usernameIn') and self.request.POST.get('passwordIn'):
+            username = self.request.POST.get('usernameIn')
+            password = self.request.POST.get('passwordIn')
+            # validate your form data
+            if username == os.environ["USERNAME"] and password == os.environ["PASSWORD"]:
+                self.request.session["user"] = True
+                self.logged_in = True
+                url = self.request.route_url('admin')
+                return HTTPFound(location=url)
+        return {'login': None}
 
-@view_defaults(accept='text/html')
-class ConceptschemeView(object):
-    """
-    This object groups HTML views part of the conceptscheme user interface.
-    """
-
-    def __init__(self, request):
-        self.request = request
-        self.logged_in = request.authenticated_userid
-        if hasattr(request, 'skos_registry') and request.skos_registry is not None:
-            self.skos_registry = self.request.skos_registry
-        else:
-            raise SkosRegistryNotFoundException()
+    @view_config(route_name='logout', permission='edit')
+    def logout_handler(self):
+        self.request.session.pop('user', None)
+        url = self.request.route_url('home')
+        return HTTPFound(location=url)
