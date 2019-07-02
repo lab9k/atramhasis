@@ -7,12 +7,13 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType
+from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType, ConceptScheme
 
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.utils import update_last_visited_concepts
 from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache, list_region
 from atramhasis.audit import audit
+import transaction
 
 
 def labels_to_string(labels, ltype):
@@ -75,13 +76,21 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         return {'conceptschemes': conceptschemes}
 
     @view_config(route_name='createscheme', renderer='atramhasis:templates/add-conceptscheme.jinja2')
     def add_conceptscheme_view(self):
-        return {'admin': None}
+        if 'user' not in self.request.session:
+            return HTTPFound(self.request.route_path('login'))
+        if 'scheme_name' in self.request.POST:
+            with transaction.manager:
+                self.conceptscheme_manager.session.add(ConceptScheme(uri=self.request.POST['scheme_uri']))
+            return HTTPFound(self.request.route_path('admin'))
+        else:
+            # TODO: return template
+            return {}
 
     @view_config(route_name='conceptschemes', renderer='atramhasis:templates/conceptschemes.jinja2')
     def conceptschemes_view(self):
@@ -93,7 +102,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         return {'conceptschemes': conceptschemes}
 
@@ -108,7 +117,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         provider = self.request.skos_registry.get_provider(scheme_id)
@@ -137,7 +146,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         c_id = self.request.matchdict['c_id']
@@ -170,7 +179,7 @@ class AtramhasisView(object):
              'conceptscheme': x.concept_scheme}
             for x in self.skos_registry.get_providers() if not any([not_shown in x.get_metadata()['subject']
                                                                     for not_shown in ['external', 'hidden']])
-            ]
+        ]
 
         scheme_id = self.request.matchdict['scheme_id']
         label = self._read_request_param('label')
@@ -178,7 +187,8 @@ class AtramhasisView(object):
         provider = self.skos_registry.get_provider(scheme_id)
         if provider:
             if label is not None:
-                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name, sort='label')
+                concepts = provider.find({'label': label, 'type': ctype}, language=self.request.locale_name,
+                                         sort='label')
             elif (label is None) and (ctype is not None):
                 concepts = provider.find({'type': ctype}, language=self.request.locale_name, sort='label')
             else:
@@ -358,7 +368,6 @@ class AtramhasisAdminView(object):
             return {'admin': None}
         url = self.request.route_url('login')
         return HTTPFound(location=url)
-
 
     @view_config(route_name='scheme_tree_invalidate', renderer='json', accept='application/json', permission='edit')
     def invalidate_scheme_tree(self):

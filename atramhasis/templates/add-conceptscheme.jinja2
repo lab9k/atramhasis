@@ -14,10 +14,14 @@
         <div class="row">
             <h1>Add Conceptscheme</h1>
             <div>
-                <label for="scheme_name">name:<input id="scheme_name" type="text"></label>
-                <label for="scheme_uri">uri:<input id="scheme_uri" type="text"></label>
-                <button type="button">Submit</button>
+                <form method="post" id="cs-form">
+                    <label for="scheme_name">name:<input id="scheme_name" type="text" name="scheme_name"></label>
+                    <input type="hidden" id="uri-hidden-input" name="scheme_uri"/>
+                    <button type="submit">Submit</button>
+                </form>
             </div>
+            <p>If you create a conceptscheme with this name, the uri will be <a href="#" id="uri-preview">
+                http://stad.gent/id/concepts/</a></p>
         </div>
     </div>
 {% endblock %}
@@ -29,5 +33,26 @@
 
 {% endblock %}
 
-{% block custom_js %}{% endblock %}
+{% block custom_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/11.0.0/validator.min.js"
+            integrity="sha256-LpPQoPEHMnUB78PFjCNTqc9BTg59UiIDBOhLYa05azc=" crossorigin="anonymous"></script>
+    <script>
+      (() => {
+        const prevEl = document.getElementById('uri-preview');
+        const nameInput = document.getElementById('scheme_name');
+        const uriInput = document.getElementById('uri-hidden-input');
+        const baseUri = 'http://stad.gent/id/concepts/';
+        const clean = (value) => validator.escape(value).split(' ').join('_');
+        nameInput.onkeyup = () => {
+          prevEl.innerText = baseUri + clean(nameInput.value);
+        };
+
+        const csForm = document.getElementById('cs-form');
+        csForm.onsubmit = function () {
+          uriInput.value = baseUri + clean(nameInput.value);
+          return true;
+        }
+      })()
+    </script>
+{% endblock %}
 

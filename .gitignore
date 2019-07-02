@@ -99,3 +99,4 @@ atramhasis/scaffolds/atramhasis_scaffold/+package+/static/scss/atramhasis
 atramhasis/scaffolds/atramhasis_scaffold/+package+/static/admin
 atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements-dev.txt_tmpl
 atramhasis/scaffolds/atramhasis_scaffold/atramhasis-requirements.txt_tmpl
+datadumps
