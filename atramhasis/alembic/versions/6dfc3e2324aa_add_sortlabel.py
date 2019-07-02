@@ -10,8 +10,8 @@ Create Date: 2017-07-04 13:53:00.064535
 revision = '6dfc3e2324aa'
 down_revision = 'b04fd493106b'
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.orm import Session
 
 labeltype_table = sa.Table(

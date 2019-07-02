@@ -4,15 +4,15 @@ Module containing error views.
 """
 
 import logging
-
-from pyramid.view import view_config, notfound_view_config
-from sqlalchemy.exc import IntegrityError
 import sys
+
+from pyramid.httpexceptions import HTTPMethodNotAllowed
+from pyramid.view import view_config, notfound_view_config
+from skosprovider.exceptions import ProviderUnavailableException
+from sqlalchemy.exc import IntegrityError
 
 from atramhasis.errors import SkosRegistryNotFoundException, ValidationError
 from atramhasis.protected_resources import ProtectedResourceException
-from skosprovider.exceptions import ProviderUnavailableException
-from pyramid.httpexceptions import HTTPMethodNotAllowed
 
 log = logging.getLogger(__name__)
 

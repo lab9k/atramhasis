@@ -2,13 +2,13 @@
 """
 Module that sets up the datamanagers and the database connections.
 """
-from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager, AuditManager
-from .models import Base
 from skosprovider_sqlalchemy.models import Base as SkosBase
-
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
+
+from atramhasis.data.datamanagers import SkosManager, ConceptSchemeManager, LanguagesManager, AuditManager
+from .models import Base
 
 
 def data_managers(request):

@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import logging
+
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
-from skosprovider_heritagedata.providers import HeritagedataProvider
-from skosprovider_getty.providers import AATProvider, TGNProvider
-
-import requests
-from cachecontrol import CacheControl
-from cachecontrol.heuristics import ExpiresAfter
-
-from datetime import date
-
 from sqlalchemy import create_engine
 
 log = logging.getLogger(__name__)

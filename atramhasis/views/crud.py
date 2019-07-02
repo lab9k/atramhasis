@@ -4,20 +4,20 @@ Module containing views related to the REST service.
 """
 
 import colander
-from pyramid.view import view_defaults, view_config
 from pyramid.httpexceptions import HTTPMethodNotAllowed
+from pyramid.view import view_defaults, view_config
+from pyramid_skosprovider.views import ProviderView
+from skosprovider_sqlalchemy.models import Concept, Collection
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.orm.exc import NoResultFound
-from skosprovider_sqlalchemy.models import Concept, Collection
 
+from atramhasis.audit import audit
+from atramhasis.cache import invalidate_scheme_cache
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, \
     ValidationError, ConceptNotFoundException
 from atramhasis.mappers import map_concept, map_conceptscheme
 from atramhasis.protected_resources import protected_operation
 from atramhasis.utils import from_thing, internal_providers_only
-from atramhasis.cache import invalidate_scheme_cache
-from atramhasis.audit import audit
-from pyramid_skosprovider.views import ProviderView
 
 
 @view_defaults(accept='application/json', renderer='skosrenderer_verbose')
