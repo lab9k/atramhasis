@@ -1,29 +1,25 @@
 # -*- coding: utf-8 -*-
-import sys
-import os
 import argparse
+import csv
+import json
+import os
+import sys
 
-from skosprovider_rdf.providers import RDFProvider
 from rdflib import Graph
 from rdflib.util import guess_format
-
+from skosprovider.providers import DictionaryProvider
 from skosprovider.providers import SimpleCsvProvider
 from skosprovider.uri import UriPatternGenerator
-import csv
-
-from skosprovider.providers import DictionaryProvider
-import json
-
-from skosprovider_sqlalchemy.utils import import_provider
+from skosprovider_rdf.providers import RDFProvider
 from skosprovider_sqlalchemy.models import (
     ConceptScheme,
     Label,
     conceptscheme_label
 )
-
+from skosprovider_sqlalchemy.utils import import_provider
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine import url
+from sqlalchemy.orm import sessionmaker
 
 
 def file_to_rdf_provider(**kwargs):

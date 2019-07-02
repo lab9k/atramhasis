@@ -1,28 +1,22 @@
 # -*- coding: utf-8 -*-
 import optparse
-import sys
 import os
-import time
+import sys
 import textwrap
-from datetime import datetime
+import time
 
+import transaction
 from pyramid.paster import bootstrap, setup_logging
+from rdflib.namespace import RDF, SKOS
+from rdflib.term import URIRef
+from skosprovider_rdf import utils
 
+from atramhasis.data.datamanagers import CountsManager
+from atramhasis.data.models import ConceptschemeCounts
 from atramhasis.errors import (
     SkosRegistryNotFoundException
 )
 
-from skosprovider_rdf import utils
-
-from datetime import datetime
-
-from rdflib.term import URIRef
-from rdflib.namespace import RDF, SKOS
-
-from atramhasis.data.models import ConceptschemeCounts
-from atramhasis.data.datamanagers import CountsManager
-
-import transaction
 
 def main():
     description = """\

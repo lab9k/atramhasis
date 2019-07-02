@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
+import json
 import optparse
-import sys
 import os
-import time
+import sys
 import textwrap
-from datetime import datetime
+import time
 
 from pyramid.paster import bootstrap, setup_logging
-
-import json
 
 from atramhasis.errors import (
     SkosRegistryNotFoundException
 )
-
 
 
 def main():

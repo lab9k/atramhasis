@@ -6,12 +6,10 @@ Module containing utility functions dealing with RDF used by Atramhasis.
 """
 
 from pyramid.settings import asbool
-
 from rdflib import Graph
-from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
 from rdflib.namespace import Namespace
+from rdflib.namespace import RDF, VOID, DCTERMS, FOAF, SKOS
 from rdflib.term import URIRef, BNode, Literal
-
 from skosprovider_rdf.utils import _add_labels
 
 FORMATS = Namespace('http://www.w3.org/ns/formats/')

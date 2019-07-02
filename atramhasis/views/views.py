@@ -1,19 +1,19 @@
 import os
 
-from pyramid.response import Response
-from pyramid.response import FileResponse
-from pyramid.view import view_config, view_defaults
+import transaction
 from pyramid.httpexceptions import HTTPFound
-from pyramid.threadlocal import get_current_registry
 from pyramid.i18n import TranslationStringFactory
-from sqlalchemy.orm.exc import NoResultFound
+from pyramid.response import FileResponse
+from pyramid.response import Response
+from pyramid.threadlocal import get_current_registry
+from pyramid.view import view_config, view_defaults
 from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType, ConceptScheme
+from sqlalchemy.orm.exc import NoResultFound
 
+from atramhasis.audit import audit
+from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache, list_region
 from atramhasis.errors import SkosRegistryNotFoundException, ConceptSchemeNotFoundException, ConceptNotFoundException
 from atramhasis.utils import update_last_visited_concepts
-from atramhasis.cache import tree_region, invalidate_scheme_cache, invalidate_cache, list_region
-from atramhasis.audit import audit
-import transaction
 
 
 def labels_to_string(labels, ltype):

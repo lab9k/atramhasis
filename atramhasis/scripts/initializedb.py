@@ -1,16 +1,16 @@
 import os
 import sys
 
-from skosprovider_sqlalchemy.models import ConceptScheme, Label
-from skosprovider_sqlalchemy.utils import import_provider
-from sqlalchemy.orm import sessionmaker
 import transaction
-from sqlalchemy import engine_from_config
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
 )
 from pyramid.scripts.common import parse_vars
+from skosprovider_sqlalchemy.models import ConceptScheme, Label
+from skosprovider_sqlalchemy.utils import import_provider
+from sqlalchemy import engine_from_config
+from sqlalchemy.orm import sessionmaker
 from zope.sqlalchemy import ZopeTransactionExtension
 
 

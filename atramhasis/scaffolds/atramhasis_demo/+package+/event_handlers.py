@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pyramid.events import subscriber
+
 from atramhasis.protected_resources import ProtectedResourceEvent, ProtectedResourceException
 
 

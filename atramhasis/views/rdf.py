@@ -6,14 +6,14 @@ from pyramid.response import Response, FileResponse
 from pyramid.view import view_defaults, view_config
 from skosprovider_rdf import utils
 
+from atramhasis.audit import audit
 from atramhasis.errors import (
     SkosRegistryNotFoundException,
     ConceptSchemeNotFoundException,
     ConceptNotFoundException
 )
-from atramhasis.audit import audit
-
 from atramhasis.rdf import void_dumper
+
 
 @view_defaults()
 class AtramhasisVoid(object):

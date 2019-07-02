@@ -3,8 +3,8 @@
 Module containing utility functions used by Atramhasis.
 """
 from collections import deque
-from pyramid.httpexceptions import HTTPMethodNotAllowed
 
+from pyramid.httpexceptions import HTTPMethodNotAllowed
 from skosprovider.skos import Concept, Collection, Label, Note, Source, ConceptScheme
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 

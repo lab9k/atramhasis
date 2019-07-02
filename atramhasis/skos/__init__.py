@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import logging
+
 from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
-
 from sqlalchemy import create_engine
 
 log = logging.getLogger(__name__)

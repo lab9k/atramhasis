@@ -1,7 +1,8 @@
-from textwrap import dedent
-from pyramid.scaffolds import PyramidTemplate, Template
-import os
 import distutils.dir_util
+import os
+from textwrap import dedent
+
+from pyramid.scaffolds import PyramidTemplate, Template
 
 
 def copy_dir_to_scaffold(output_dir, package, dir):

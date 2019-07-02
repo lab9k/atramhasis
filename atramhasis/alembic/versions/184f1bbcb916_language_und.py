@@ -10,10 +10,10 @@ Create Date: 2017-07-25 16:38:39.439673
 revision = '184f1bbcb916'
 down_revision = '6dfc3e2324aa'
 
-from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.sql import table, column
+from alembic import op
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import table, column
 
 language_table = table('language',
                        column('id', sa.String),
