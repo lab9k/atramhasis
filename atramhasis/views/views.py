@@ -7,7 +7,9 @@ from pyramid.response import FileResponse
 from pyramid.response import Response
 from pyramid.threadlocal import get_current_registry
 from pyramid.view import view_config, view_defaults
+from skosprovider.uri import UriPatternGenerator
 from skosprovider_sqlalchemy.models import Collection, Concept, LabelType, NoteType, ConceptScheme
+from skosprovider_sqlalchemy.providers import SQLAlchemyProvider
 from sqlalchemy.orm.exc import NoResultFound
 
 from atramhasis.audit import audit
@@ -85,9 +87,11 @@ class AtramhasisView(object):
         if 'user' not in self.request.session:
             return HTTPFound(self.request.route_path('login'))
         if 'scheme_name' in self.request.POST:
-            with transaction.manager:
-                self.conceptscheme_manager.session.add(ConceptScheme(uri=self.request.POST['scheme_uri']))
-            return HTTPFound(self.request.route_path('admin'))
+            cscheme = ConceptScheme(uri=self.request.POST['scheme_uri'])
+            self.conceptscheme_manager.session.add(cscheme)
+            command = 'touch atramhasis/__init__.py'
+            os.system(command)
+            return {'success': True}
         else:
             # TODO: return template
             return {}

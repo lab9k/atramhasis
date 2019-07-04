@@ -10,20 +10,42 @@
 {% endblock %}
 
 {% block content %}
-    <div class="bgcontainer">
-        <div class="row">
-            <h1>Add Conceptscheme</h1>
-            <div>
-                <form method="post" id="cs-form">
-                    <label for="scheme_name">name:<input id="scheme_name" type="text" name="scheme_name"></label>
-                    <input type="hidden" id="uri-hidden-input" name="scheme_uri"/>
-                    <button type="submit">Submit</button>
-                </form>
+    {% if success == True %}
+        <div class="bgcontainer">
+            <div class="row">
+                <h1>Conceptscheme created succesfully</h1>
+                <p>The server is restarting. You will be redirected to home in <span id="secs">10</span>seconds.</p>
+                <script>
+                  const secsElem = document.getElementById('secs');
+                  let seconds = parseInt(secsElem.innerText, 10);
+                  setInterval(() => {
+                    seconds -= 1;
+                    secsElem.innerText = seconds;
+                    if (seconds === 0) {
+                      window.location = "/"
+                    }
+                  }, 1000)
+                </script>
             </div>
-            <p>If you create a conceptscheme with this name, the uri will be <a href="#" id="uri-preview">
-                http://stad.gent/id/concepts/</a></p>
         </div>
-    </div>
+    {% else %}
+        <div class="bgcontainer">
+            <div class="row">
+                <h1>Add Conceptscheme</h1>
+                <div>
+                    <form method="post" id="cs-form">
+                        <label for="scheme_name">name:<input id="scheme_name" type="text" name="scheme_name"></label>
+                        <input type="hidden" id="uri-hidden-input" name="scheme_uri"/>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <p>If you create a conceptscheme with this name, the uri will be <a href="#" id="uri-preview">
+                    http://stad.gent/id/concepts/</a></p>
+            </div>
+        </div>
+    {% endif %}
+
+
 {% endblock %}
 
 {% block subfooter %}
