@@ -1,0 +1,14 @@
+#!/bin/bash
+python3 -m venv ./venv
+source ./venv/bin/activate
+pip install atramhasis
+pcreate -s atramhasis_scaffold thesaurus_gent
+cd thesaurus_gent
+pip install -r requirements-dev.txt
+pip install pyramid_debugtoolbar
+alembic upgrade head
+python setup.py develop
+cd my_thesaurus/static
+bower install
+cd admin
+bower install
