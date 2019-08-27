@@ -24,6 +24,7 @@ RUN apt-get install -y git
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g bower
+RUN npm install -g grunt-cli
 # ------- Or annd needed libraries into "requirements.txt" file and use it:
 
 RUN python3.6 -m pip install -r requirements-dev.txt
@@ -32,7 +33,9 @@ RUN alembic upgrade head
 RUN cd atramhasis/static && \
     bower install --allow-root && \
     cd admin && \
-    bower install --allow-root
+    bower install --allow-root && \
+    npm install && \
+    grunt build
 
 RUN python3.6 setup.py compile_catalog
 RUN python3.6 setup.py develop
