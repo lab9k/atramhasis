@@ -1,17 +1,3 @@
-#FROM ubuntu
-#
-#
-#COPY . /app
-#WORKDIR /app
-#
-#RUN pip install -r requirements-dev.txt
-#RUN python setup.py develop
-#RUN alembic upgrade head
-#RUN cd atramhasis/static && \
-#    bower install && \
-#    cd admin && \
-#    bower install
-#
 FROM ubuntu:16.04
 
 COPY . /app
@@ -51,4 +37,4 @@ RUN cd atramhasis/static && \
 RUN python3.6 setup.py compile_catalog
 EXPOSE 6543
 
-CMD pserve development.ini
+ENTRYPOINT ["pserve", "development.ini"]
