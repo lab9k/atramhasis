@@ -35,6 +35,8 @@ RUN cd atramhasis/static && \
     bower install --allow-root
 
 RUN python3.6 setup.py compile_catalog
+RUN python3.6 setup.py develop
+RUN alembic upgrade head
 EXPOSE 6543
 
 ENTRYPOINT ["pserve", "development.ini"]
