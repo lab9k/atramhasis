@@ -25,7 +25,7 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:jonathonf/python-3.6
 RUN apt-get update
 
-RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv python3-setuptools
+RUN apt-get install -y build-essential python3.6 python3.6-dev python3-pip python3.6-venv
 RUN python3.6 -m pip install pip --upgrade
 RUN python3.6 -m pip install --upgrade setuptools
 
@@ -34,6 +34,7 @@ RUN python3.6 -m pip install --upgrade setuptools
 # RUN apt-get install -y libsm6 libxext6 libglib2.0-0 libxrender-dev
 RUN apt-get install -y python-software-properties
 RUN apt-get install -y curl
+RUN apt-get install -y git
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g bower
